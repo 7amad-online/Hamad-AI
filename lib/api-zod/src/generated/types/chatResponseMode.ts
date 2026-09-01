@@ -5,17 +5,6 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-export interface HealthStatus {
-  status: string;
-}
-
-export interface ChatRequest {
-  /**
-     * @minLength 1
-     * @maxLength 4000
-     */
-  message: string;
-}
 
 export type ChatResponseMode = typeof ChatResponseMode[keyof typeof ChatResponseMode];
 
@@ -23,9 +12,3 @@ export type ChatResponseMode = typeof ChatResponseMode[keyof typeof ChatResponse
 export const ChatResponseMode = {
   local: 'local',
 } as const;
-
-export interface ChatResponse {
-  reply: string;
-  mode: ChatResponseMode;
-}
-

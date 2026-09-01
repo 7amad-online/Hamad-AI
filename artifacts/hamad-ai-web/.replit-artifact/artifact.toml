@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Hamad AI"
+description = "A personal AI assistant web app with a friendly mobile-first chat interface and a local FastAPI backend that responds without requiring an API key."
+version = "1.0.0"
+id = "artifacts/hamad-ai-web"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25560
+
+[services.development]
+run = "pnpm --filter @workspace/hamad-ai-web run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/hamad-ai-web", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/hamad-ai-web/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25560"
+BASE_PATH = "/"
