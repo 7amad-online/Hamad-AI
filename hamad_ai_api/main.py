@@ -100,7 +100,11 @@ async def _chat_response(payload: ChatRequest) -> ChatResponse:
             )
             detail = (
                 "The OpenAI account has no remaining quota."
-                if error_code in {"insufficient_quota", "billing_hard_limit_reached"}
+                if error_code in {
+                    "credit_balance_exhausted",
+                    "insufficient_quota",
+                    "billing_hard_limit_reached",
+                }
                 else "OpenAI is temporarily rate-limited. Please try again shortly."
             )
             raise HTTPException(status_code=429, detail=detail) from None

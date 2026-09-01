@@ -25,6 +25,18 @@ type Message = {
   mode?: string;
 };
 
+function getChatErrorMessage(error: unknown): string {
+  if (error && typeof error === 'object' && 'data' in error) {
+    const data = (error as { data?: unknown }).data;
+    if (data && typeof data === 'object' && 'detail' in data) {
+      const detail = (data as { detail?: unknown }).detail;
+      if (typeof detail === 'string' && detail.trim()) return detail;
+    }
+  }
+
+  return 'Hamad AI could not complete that request. Please try again shortly.';
+}
+
 const quickActions = [
   {
     label: '📋 My Tasks',
@@ -367,6 +379,7 @@ export default function Home() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messageIdRef = useRef(0);
   const sendChat = useSendChatMessage();
+  const chatErrorMessage = getChatErrorMessage(sendChat.error);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -478,8 +491,8 @@ export default function Home() {
                       className="message-in ml-11 max-w-[510px] rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-[13px] leading-5 text-foreground"
                       data-testid="status-chat-error"
                     >
-                      <p className="font-bold text-destructive">That didn&apos;t come through.</p>
-                      <p className="mt-1 text-muted-foreground">Check your connection and try sending that thought again.</p>
+                      <p className="font-bold text-destructive">Hamad AI couldn&apos;t reply.</p>
+                      <p className="mt-1 text-muted-foreground">{chatErrorMessage}</p>
                       <button
                         type="button"
                         onClick={() => sendChat.reset()}
