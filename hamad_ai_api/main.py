@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import os
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from openai import APIConnectionError, APIStatusError, AsyncOpenAI, RateLimitError
 from pydantic import BaseModel, Field
+
+logger = logging.getLogger("hamad_ai.openai")
 
 
 class ChatRequest(BaseModel):
@@ -59,6 +62,11 @@ async def _chat_response(payload: ChatRequest) -> ChatResponse:
 
     client = AsyncOpenAI(api_key=api_key, max_retries=0, timeout=45.0)
     model = os.getenv("OPENAI_MODEL", "gpt-5.4-mini")
+    logger.info(
+        "OpenAI chat request: model=%s message_length=%d",
+        model,
+        len(payload.message),
+    )
 
     completion = None
     for attempt in range(3):
@@ -84,6 +92,12 @@ async def _chat_response(payload: ChatRequest) -> ChatResponse:
                 if isinstance(body_error, dict):
                     error_code = body_error.get("code", error_code)
 
+            logger.warning(
+                "OpenAI rate limit: model=%s code=%s request_id=%s",
+                model,
+                error_code or "unknown",
+                getattr(error, "request_id", None) or "unknown",
+            )
             detail = (
                 "The OpenAI account has no remaining quota."
                 if error_code in {"insufficient_quota", "billing_hard_limit_reached"}
@@ -91,17 +105,25 @@ async def _chat_response(payload: ChatRequest) -> ChatResponse:
             )
             raise HTTPException(status_code=429, detail=detail) from None
         except APIConnectionError:
+            logger.error("OpenAI connection error: model=%s", model)
             raise HTTPException(
                 status_code=502,
                 detail="Hamad AI could not reach OpenAI. Please try again.",
             ) from None
         except APIStatusError as error:
             status_code = error.status if 400 <= error.status < 600 else 502
+            logger.error(
+                "OpenAI API error: model=%s status=%s request_id=%s",
+                model,
+                status_code,
+                getattr(error, "request_id", None) or "unknown",
+            )
             raise HTTPException(
                 status_code=status_code,
                 detail="Hamad AI could not complete that request.",
             ) from None
         except Exception:
+            logger.exception("Unexpected OpenAI error: model=%s", model)
             raise HTTPException(
                 status_code=502,
                 detail="Hamad AI could not complete that request.",
