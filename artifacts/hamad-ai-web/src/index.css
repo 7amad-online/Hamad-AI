@@ -79,40 +79,40 @@
   --elevate-1: rgba(0, 0, 0, 0.03);
   --elevate-2: rgba(0, 0, 0, 0.08);
 
-  --background: 228 36% 10%;
-  --foreground: 39 50% 94%;
-  --border: 225 24% 21%;
-  --card: 229 31% 14%;
-  --card-foreground: 39 50% 94%;
-  --card-border: 225 24% 24%;
-  --sidebar: 230 37% 8%;
-  --sidebar-foreground: 39 50% 94%;
-  --sidebar-border: 225 24% 17%;
-  --sidebar-primary: 42 88% 62%;
-  --sidebar-primary-foreground: 229 36% 10%;
-  --sidebar-accent: 226 28% 16%;
-  --sidebar-accent-foreground: 39 50% 94%;
-  --sidebar-ring: 42 88% 62%;
-  --popover: 229 31% 14%;
-  --popover-foreground: 39 50% 94%;
-  --popover-border: 225 24% 24%;
-  --primary: 42 88% 62%;
-  --primary-foreground: 229 36% 10%;
-  --secondary: 180 30% 25%;
-  --secondary-foreground: 174 53% 80%;
-  --muted: 226 24% 16%;
-  --muted-foreground: 222 14% 63%;
-  --accent: 174 53% 69%;
-  --accent-foreground: 229 36% 10%;
-  --destructive: 4 71% 62%;
-  --destructive-foreground: 39 50% 94%;
-  --input: 225 24% 25%;
-  --ring: 42 88% 62%;
-  --chart-1: 42 88% 62%;
-  --chart-2: 174 53% 69%;
-  --chart-3: 4 71% 62%;
-  --chart-4: 229 54% 68%;
-  --chart-5: 39 50% 94%;
+  --background: 36 46% 96%;
+  --foreground: 24 24% 17%;
+  --border: 30 22% 86%;
+  --card: 39 60% 99%;
+  --card-foreground: 24 24% 17%;
+  --card-border: 30 22% 86%;
+  --sidebar: 25 34% 17%;
+  --sidebar-foreground: 37 50% 95%;
+  --sidebar-border: 25 23% 27%;
+  --sidebar-primary: 11 66% 63%;
+  --sidebar-primary-foreground: 25 34% 17%;
+  --sidebar-accent: 25 27% 23%;
+  --sidebar-accent-foreground: 37 50% 95%;
+  --sidebar-ring: 11 66% 63%;
+  --popover: 39 60% 99%;
+  --popover-foreground: 24 24% 17%;
+  --popover-border: 30 22% 86%;
+  --primary: 11 66% 48%;
+  --primary-foreground: 39 60% 99%;
+  --secondary: 155 26% 33%;
+  --secondary-foreground: 152 35% 96%;
+  --muted: 34 32% 91%;
+  --muted-foreground: 27 13% 49%;
+  --accent: 157 31% 37%;
+  --accent-foreground: 39 60% 99%;
+  --destructive: 3 67% 47%;
+  --destructive-foreground: 39 60% 99%;
+  --input: 30 22% 82%;
+  --ring: 11 66% 48%;
+  --chart-1: 11 66% 48%;
+  --chart-2: 157 31% 37%;
+  --chart-3: 38 82% 54%;
+  --chart-4: 190 28% 38%;
+  --chart-5: 24 24% 17%;
   --app-font-sans: 'Plus Jakarta Sans', sans-serif;
   --app-font-serif: 'Instrument Serif', serif;
   --app-font-mono: 'DM Mono', monospace;
@@ -200,40 +200,40 @@
   --elevate-1: rgba(255, 255, 255, 0.04);
   --elevate-2: rgba(255, 255, 255, 0.09);
 
-  --background: 228 36% 10%;
-  --foreground: 39 50% 94%;
-  --border: 225 24% 21%;
-  --card: 229 31% 14%;
-  --card-foreground: 39 50% 94%;
-  --card-border: 225 24% 24%;
-  --sidebar: 230 37% 8%;
-  --sidebar-foreground: 39 50% 94%;
-  --sidebar-border: 225 24% 17%;
-  --sidebar-primary: 42 88% 62%;
-  --sidebar-primary-foreground: 229 36% 10%;
-  --sidebar-accent: 226 28% 16%;
-  --sidebar-accent-foreground: 39 50% 94%;
-  --sidebar-ring: 42 88% 62%;
-  --popover: 229 31% 14%;
-  --popover-foreground: 39 50% 94%;
-  --popover-border: 225 24% 24%;
-  --primary: 42 88% 62%;
-  --primary-foreground: 229 36% 10%;
-  --secondary: 180 30% 25%;
-  --secondary-foreground: 174 53% 80%;
-  --muted: 226 24% 16%;
-  --muted-foreground: 222 14% 63%;
-  --accent: 174 53% 69%;
-  --accent-foreground: 229 36% 10%;
-  --destructive: 4 71% 62%;
-  --destructive-foreground: 39 50% 94%;
-  --input: 225 24% 25%;
-  --ring: 42 88% 62%;
-  --chart-1: 42 88% 62%;
-  --chart-2: 174 53% 69%;
-  --chart-3: 4 71% 62%;
-  --chart-4: 229 54% 68%;
-  --chart-5: 39 50% 94%;
+  --background: 228 31% 11%;
+  --foreground: 38 45% 94%;
+  --border: 224 22% 23%;
+  --card: 228 27% 15%;
+  --card-foreground: 38 45% 94%;
+  --card-border: 224 22% 25%;
+  --sidebar: 229 34% 8%;
+  --sidebar-foreground: 38 45% 94%;
+  --sidebar-border: 224 22% 17%;
+  --sidebar-primary: 11 74% 66%;
+  --sidebar-primary-foreground: 229 34% 8%;
+  --sidebar-accent: 225 26% 16%;
+  --sidebar-accent-foreground: 38 45% 94%;
+  --sidebar-ring: 11 74% 66%;
+  --popover: 228 27% 15%;
+  --popover-foreground: 38 45% 94%;
+  --popover-border: 224 22% 25%;
+  --primary: 11 74% 66%;
+  --primary-foreground: 229 34% 8%;
+  --secondary: 157 27% 28%;
+  --secondary-foreground: 157 35% 86%;
+  --muted: 225 22% 18%;
+  --muted-foreground: 222 14% 66%;
+  --accent: 157 42% 67%;
+  --accent-foreground: 229 34% 8%;
+  --destructive: 3 67% 62%;
+  --destructive-foreground: 38 45% 94%;
+  --input: 224 22% 27%;
+  --ring: 11 74% 66%;
+  --chart-1: 11 74% 66%;
+  --chart-2: 157 42% 67%;
+  --chart-3: 39 82% 62%;
+  --chart-4: 190 32% 64%;
+  --chart-5: 38 45% 94%;
 
   --shadow-2xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0);
   --shadow-xs: 0px 2px 0px 0px hsl(202.8169 89.1213% 53.1373% / 0);
@@ -379,7 +379,7 @@
 
 @layer base {
   html {
-    background: #11182a;
+    background: #f4eee4;
   }
 
   body {
@@ -400,8 +400,8 @@
 
 .app-shell {
   background:
-    radial-gradient(circle at 72% -8%, hsl(174 53% 69% / 0.11), transparent 31rem),
-    radial-gradient(circle at -12% 78%, hsl(42 88% 62% / 0.08), transparent 30rem),
+    radial-gradient(circle at 82% -14%, hsl(11 66% 48% / 0.12), transparent 28rem),
+    radial-gradient(circle at -8% 76%, hsl(157 31% 37% / 0.09), transparent 25rem),
     hsl(var(--background));
 }
 
@@ -410,8 +410,30 @@
   inset: 0;
   pointer-events: none;
   z-index: 20;
-  opacity: 0.038;
+  opacity: 0.026;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");
+}
+
+.brand-orb {
+  background:
+    radial-gradient(circle at 32% 25%, hsl(39 60% 99% / 0.35), transparent 21%),
+    linear-gradient(145deg, hsl(11 66% 55%), hsl(157 31% 37%));
+  box-shadow:
+    0 8px 18px hsl(11 66% 48% / 0.2),
+    inset 0 1px 0 hsl(39 60% 99% / 0.35);
+}
+
+.warm-panel {
+  background: linear-gradient(145deg, hsl(39 60% 99% / 0.9), hsl(35 46% 94% / 0.78));
+  box-shadow:
+    0 18px 45px hsl(25 25% 24% / 0.07),
+    inset 0 1px 0 hsl(39 60% 99% / 0.9);
+}
+
+.composer-shadow {
+  box-shadow:
+    0 18px 36px hsl(25 25% 24% / 0.1),
+    0 3px 8px hsl(25 25% 24% / 0.05);
 }
 
 .chat-scroll {
@@ -429,7 +451,7 @@
 }
 
 .message-in {
-  animation: message-in 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: message-in 380ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .stagger-1 {
@@ -483,5 +505,11 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .chat-scroll {
+    overscroll-behavior-y: contain;
   }
 }
