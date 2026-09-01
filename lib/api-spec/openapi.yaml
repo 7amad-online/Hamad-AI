@@ -72,7 +72,7 @@ components:
           type: string
         mode:
           type: string
-          enum: [local]
+          enum: [local, openai]
       required:
         - reply
         - mode

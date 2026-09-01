@@ -213,7 +213,7 @@ function MessageBubble({ message }: { message: Message }) {
           <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
         </div>
       )}
-      <div className={isUser ? 'max-w-[84%] rounded-[20px] rounded-tr-sm bg-primary px-4 py-3 text-[14px] leading-6 text-primary-foreground shadow-sm sm:max-w-[69%]' : 'max-w-[89%] rounded-[20px] rounded-tl-sm border border-border bg-card px-4 py-3 text-[14px] leading-6 text-card-foreground shadow-sm sm:max-w-[76%]'}>
+      <div dir="auto" className={isUser ? 'max-w-[84%] rounded-[20px] rounded-tr-sm bg-primary px-4 py-3 text-[14px] leading-6 text-primary-foreground shadow-sm sm:max-w-[69%]' : 'max-w-[89%] rounded-[20px] rounded-tl-sm border border-border bg-card px-4 py-3 text-[14px] leading-6 text-card-foreground shadow-sm sm:max-w-[76%]'}>
         {message.text.split('\n').map((line, index) => (
           <span className="block" key={`${message.id}-${index}`}>
             {line || '\u00a0'}
@@ -320,6 +320,7 @@ function Composer({
           <textarea
             ref={textareaRef}
             value={value}
+            dir="auto"
             onChange={(event) => onChange(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === 'Enter' && !event.shiftKey) {

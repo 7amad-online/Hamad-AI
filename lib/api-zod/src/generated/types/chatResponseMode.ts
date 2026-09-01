@@ -11,4 +11,5 @@ export type ChatResponseMode = typeof ChatResponseMode[keyof typeof ChatResponse
 
 export const ChatResponseMode = {
   local: 'local',
+  openai: 'openai',
 } as const;
