@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hamad-ai"
+version = "0.1.0"
+description = "A lightweight local-first AI assistant starter project."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+  { name = "Hamad AI" }
+]
+dependencies = []
+
+[project.scripts]
+hamad-ai = "hamad_ai.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["hamad_ai*"]
