@@ -8,10 +8,12 @@ import os
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from openai import APIConnectionError, APIStatusError, AsyncOpenAI, RateLimitError
+from google import genai
+from google.genai import errors, types
 from pydantic import BaseModel, Field
 
-logger = logging.getLogger("hamad_ai.openai")
+logger = logging.getLogger("hamad_ai.gemini")
+DEFAULT_GEMINI_MODEL = "gemini-3.6-flash"
 
 
 class ChatRequest(BaseModel):
@@ -24,12 +26,12 @@ class ChatResponse(BaseModel):
     """Payload returned by the chat endpoint."""
 
     reply: str
-    mode: str = "openai"
+    mode: str = "gemini"
 
 
 app = FastAPI(
     title="Hamad AI API",
-    description="OpenAI-powered chat API for the Hamad AI personal assistant.",
+    description="Gemini-powered chat API for the Hamad AI personal assistant.",
     version="0.1.0",
 )
 
@@ -53,17 +55,17 @@ or internal implementation details."""
 
 
 async def _chat_response(payload: ChatRequest) -> ChatResponse:
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise HTTPException(
             status_code=503,
-            detail="OpenAI is not configured on the server.",
+            detail="Gemini is not configured on the server.",
         )
 
-    client = AsyncOpenAI(api_key=api_key, max_retries=0, timeout=45.0)
-    model = os.getenv("OPENAI_MODEL", "gpt-5.4-mini")
+    client = genai.Client(api_key=api_key)
+    model = os.getenv("GEMINI_MODEL", DEFAULT_GEMINI_MODEL)
     logger.info(
-        "OpenAI chat request: model=%s message_length=%d",
+        "Gemini chat request: model=%s message_length=%d",
         model,
         len(payload.message),
     )
@@ -71,66 +73,48 @@ async def _chat_response(payload: ChatRequest) -> ChatResponse:
     completion = None
     for attempt in range(3):
         try:
-            completion = await client.chat.completions.create(
+            completion = await client.aio.models.generate_content(
                 model=model,
-                max_completion_tokens=8192,
-                messages=[
-                    {"role": "system", "content": ASSISTANT_INSTRUCTIONS},
-                    {"role": "user", "content": payload.message},
-                ],
+                contents=payload.message,
+                config=types.GenerateContentConfig(
+                    system_instruction=ASSISTANT_INSTRUCTIONS,
+                    max_output_tokens=8192,
+                ),
             )
             break
-        except RateLimitError as error:
-            if attempt < 2:
+        except errors.APIError as error:
+            status = getattr(error, "status", None)
+            raw_message = str(getattr(error, "message", "") or "")
+            safe_message = raw_message.replace(api_key, "[redacted]")[:300]
+            logger.error(
+                "Gemini API error: model=%s status=%s error_type=%s message=%s",
+                model,
+                status or "unknown",
+                type(error).__name__,
+                safe_message or "unknown",
+            )
+
+            if status == 429 and attempt < 2:
                 await asyncio.sleep(1.0 * (attempt + 1))
                 continue
 
-            error_code = getattr(error, "code", None)
-            error_body = getattr(error, "body", None)
-            if isinstance(error_body, dict):
-                body_error = error_body.get("error")
-                if isinstance(body_error, dict):
-                    error_code = body_error.get("code", error_code)
-
-            logger.warning(
-                "OpenAI rate limit: model=%s code=%s request_id=%s",
-                model,
-                error_code or "unknown",
-                getattr(error, "request_id", None) or "unknown",
-            )
-            detail = (
-                "The OpenAI account has no remaining quota."
-                if error_code in {
-                    "credit_balance_exhausted",
-                    "insufficient_quota",
-                    "billing_hard_limit_reached",
-                }
-                else "OpenAI is temporarily rate-limited. Please try again shortly."
-            )
-            raise HTTPException(status_code=429, detail=detail) from None
-        except APIConnectionError:
-            logger.error("OpenAI connection error: model=%s", model)
+            if status == 401 or status == 403:
+                detail = "The Gemini API key was rejected or lacks access."
+            elif status == 404:
+                detail = "The configured Gemini model is not available for this API key."
+            elif status == 429:
+                detail = "Gemini is temporarily rate-limited. Please try again shortly."
+            else:
+                detail = "Hamad AI could not complete that request through Gemini."
             raise HTTPException(
-                status_code=502,
-                detail="Hamad AI could not reach OpenAI. Please try again.",
-            ) from None
-        except APIStatusError as error:
-            status_code = error.status if 400 <= error.status < 600 else 502
-            logger.error(
-                "OpenAI API error: model=%s status=%s request_id=%s",
-                model,
-                status_code,
-                getattr(error, "request_id", None) or "unknown",
-            )
-            raise HTTPException(
-                status_code=status_code,
-                detail="Hamad AI could not complete that request.",
+                status_code=status if isinstance(status, int) and 400 <= status < 600 else 502,
+                detail=detail,
             ) from None
         except Exception:
-            logger.exception("Unexpected OpenAI error: model=%s", model)
+            logger.exception("Unexpected Gemini error: model=%s", model)
             raise HTTPException(
                 status_code=502,
-                detail="Hamad AI could not complete that request.",
+                detail="Hamad AI could not complete that request through Gemini.",
             ) from None
 
     if completion is None:
@@ -139,14 +123,22 @@ async def _chat_response(payload: ChatRequest) -> ChatResponse:
             detail="Hamad AI could not complete that request.",
         )
 
-    reply = completion.choices[0].message.content if completion.choices else None
+    try:
+        reply = completion.text
+    except Exception:
+        logger.exception("Gemini response parsing error: model=%s", model)
+        raise HTTPException(
+            status_code=502,
+            detail="Hamad AI received an unreadable response from Gemini.",
+        ) from None
+
     if not reply:
         raise HTTPException(
             status_code=502,
             detail="Hamad AI returned an empty response.",
         )
 
-    return ChatResponse(reply=reply.strip(), mode="openai")
+    return ChatResponse(reply=reply.strip(), mode="gemini")
 
 
 @app.get("/api/healthz")
@@ -159,5 +151,5 @@ def health_check() -> dict[str, str]:
 @app.post("/api/chat", response_model=ChatResponse)
 @app.post("/chat", response_model=ChatResponse)
 async def chat(payload: ChatRequest) -> ChatResponse:
-    """Return an OpenAI-powered assistant response."""
+    """Return a Gemini-powered assistant response."""
     return await _chat_response(payload)

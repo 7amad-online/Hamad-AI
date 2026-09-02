@@ -31,7 +31,7 @@ export const SendChatMessageBody = zod.object({
 
 export const SendChatMessageResponse = zod.object({
   "reply": zod.string(),
-  "mode": zod.enum(['local', 'openai'])
+  "mode": zod.enum(['gemini'])
 })
 
 

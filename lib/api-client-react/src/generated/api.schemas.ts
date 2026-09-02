@@ -21,8 +21,7 @@ export type ChatResponseMode = typeof ChatResponseMode[keyof typeof ChatResponse
 
 
 export const ChatResponseMode = {
-  local: 'local',
-  openai: 'openai',
+  gemini: 'gemini',
 } as const;
 
 export interface ChatResponse {
