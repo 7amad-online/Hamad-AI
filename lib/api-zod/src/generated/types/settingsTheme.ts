@@ -6,9 +6,10 @@
  * OpenAPI spec version: 0.2.0
  */
 
-export type ChatResponseMode = typeof ChatResponseMode[keyof typeof ChatResponseMode];
+export type SettingsTheme = typeof SettingsTheme[keyof typeof SettingsTheme];
 
 
-export const ChatResponseMode = {
-  gemini: 'gemini',
+export const SettingsTheme = {
+  light: 'light',
+  dark: 'dark',
 } as const;

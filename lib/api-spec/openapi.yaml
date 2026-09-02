@@ -1,24 +1,25 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
-  version: 0.1.0
-  description: API specification
+  version: 0.2.0
+  description: Hamad AI assistant API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
-    description: Health operations
   - name: chat
-    description: Chat operations
+  - name: tasks
+  - name: reminders
+  - name: day
+  - name: conversations
+  - name: settings
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -31,7 +32,6 @@ paths:
       operationId: sendChatMessage
       tags: [chat]
       summary: Send a message to Hamad AI
-      description: Sends a message and returns the assistant response.
       requestBody:
         required: true
         content:
@@ -45,35 +45,420 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ChatResponse"
-        "422":
-          description: Invalid message
+  /tasks:
+    get:
+      operationId: listTasks
+      tags: [tasks]
+      summary: List tasks
+      responses:
+        "200":
+          description: Tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+    post:
+      operationId: createTask
+      tags: [tasks]
+      summary: Create a task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskInput"
+      responses:
+        "201":
+          description: Created task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+  /tasks/{task_id}:
+    patch:
+      operationId: updateTask
+      tags: [tasks]
+      summary: Update a task
+      parameters:
+        - $ref: "#/components/parameters/TaskId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskUpdate"
+      responses:
+        "200":
+          description: Updated task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+    delete:
+      operationId: deleteTask
+      tags: [tasks]
+      summary: Delete a task
+      parameters:
+        - $ref: "#/components/parameters/TaskId"
+      responses:
+        "204":
+          description: Deleted
+  /reminders:
+    get:
+      operationId: listReminders
+      tags: [reminders]
+      summary: List upcoming reminders
+      responses:
+        "200":
+          description: Reminders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Reminder"
+    post:
+      operationId: createReminder
+      tags: [reminders]
+      summary: Create a reminder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReminderInput"
+      responses:
+        "201":
+          description: Created reminder
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reminder"
+  /reminders/{reminder_id}:
+    patch:
+      operationId: updateReminder
+      tags: [reminders]
+      summary: Complete or reopen a reminder
+      parameters:
+        - $ref: "#/components/parameters/ReminderId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReminderUpdate"
+      responses:
+        "200":
+          description: Updated reminder
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reminder"
+    delete:
+      operationId: deleteReminder
+      tags: [reminders]
+      summary: Delete a reminder
+      parameters:
+        - $ref: "#/components/parameters/ReminderId"
+      responses:
+        "204":
+          description: Deleted
+  /day:
+    get:
+      operationId: getDay
+      tags: [day]
+      summary: Get today's tasks
+      responses:
+        "200":
+          description: Today's tasks
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Day"
+  /day/plan:
+    post:
+      operationId: createDailyPlan
+      tags: [day]
+      summary: Create an AI daily plan
+      responses:
+        "200":
+          description: Daily plan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DailyPlan"
+  /conversations:
+    get:
+      operationId: listConversations
+      tags: [conversations]
+      summary: List recent conversations
+      responses:
+        "200":
+          description: Conversations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Conversation"
+  /conversations/{conversation_id}/messages:
+    get:
+      operationId: listConversationMessages
+      tags: [conversations]
+      summary: Load conversation messages
+      parameters:
+        - $ref: "#/components/parameters/ConversationId"
+      responses:
+        "200":
+          description: Conversation messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Message"
+  /settings:
+    get:
+      operationId: getSettings
+      tags: [settings]
+      summary: Get assistant settings
+      responses:
+        "200":
+          description: Settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+    patch:
+      operationId: updateSettings
+      tags: [settings]
+      summary: Update assistant settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SettingsUpdate"
+      responses:
+        "200":
+          description: Updated settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
 components:
+  parameters:
+    TaskId:
+      name: task_id
+      in: path
+      required: true
+      schema:
+        type: number
+    ReminderId:
+      name: reminder_id
+      in: path
+      required: true
+      schema:
+        type: number
+    ConversationId:
+      name: conversation_id
+      in: path
+      required: true
+      schema:
+        type: number
   schemas:
     HealthStatus:
       type: object
+      required: [status]
       properties:
         status:
           type: string
-      required:
-        - status
     ChatRequest:
       type: object
+      required: [message]
       properties:
         message:
           type: string
           minLength: 1
           maxLength: 4000
-      required:
-        - message
+        conversation_id:
+          type: number
+          minimum: 1
+          nullable: true
     ChatResponse:
       type: object
+      required: [reply, mode, conversation_id]
       properties:
         reply:
           type: string
         mode:
           type: string
           enum: [gemini]
-      required:
-        - reply
-        - mode
-
+        conversation_id:
+          type: number
+    TaskInput:
+      type: object
+      required: [title, due_date, priority, status]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        due_date:
+          type: string
+          format: date
+        priority:
+          type: string
+          enum: [low, medium, high]
+        status:
+          type: string
+          enum: [todo, in_progress, completed]
+    TaskUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        due_date:
+          type: string
+          format: date
+        priority:
+          type: string
+          enum: [low, medium, high]
+        status:
+          type: string
+          enum: [todo, in_progress, completed]
+    Task:
+      allOf:
+        - $ref: "#/components/schemas/TaskInput"
+        - type: object
+          required: [id, created_at, updated_at]
+          properties:
+            id:
+              type: number
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+    ReminderInput:
+      type: object
+      required: [title, remind_at]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        remind_at:
+          type: string
+          format: date-time
+    ReminderUpdate:
+      type: object
+      required: [completed]
+      properties:
+        completed:
+          type: boolean
+    Reminder:
+      allOf:
+        - $ref: "#/components/schemas/ReminderInput"
+        - type: object
+          required: [id, completed, created_at, updated_at]
+          properties:
+            id:
+              type: number
+            completed:
+              type: boolean
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+    Day:
+      type: object
+      required: [date, tasks]
+      properties:
+        date:
+          type: string
+          format: date
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+    DailyPlan:
+      type: object
+      required: [date, tasks, plan]
+      properties:
+        date:
+          type: string
+          format: date
+        tasks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Task"
+        plan:
+          type: string
+    Conversation:
+      type: object
+      required: [id, title, created_at, updated_at]
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Message:
+      type: object
+      required: [id, conversation_id, role, content, created_at]
+      properties:
+        id:
+          type: number
+        conversation_id:
+          type: number
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    Settings:
+      type: object
+      required: [id, language, theme, assistant_name, updated_at]
+      properties:
+        id:
+          type: number
+        language:
+          type: string
+          enum: [en, ar]
+        theme:
+          type: string
+          enum: [light, dark]
+        assistant_name:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+    SettingsUpdate:
+      type: object
+      properties:
+        language:
+          type: string
+          enum: [en, ar]
+        theme:
+          type: string
+          enum: [light, dark]
+        assistant_name:
+          type: string
+          minLength: 1
+          maxLength: 80

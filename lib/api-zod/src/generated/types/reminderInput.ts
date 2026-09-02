@@ -6,12 +6,11 @@
  * OpenAPI spec version: 0.2.0
  */
 
-export interface ChatRequest {
+export interface ReminderInput {
   /**
      * @minLength 1
-     * @maxLength 4000
+     * @maxLength 200
      */
-  message: string;
-  /** @minimum 1 */
-  conversation_id?: number | null;
+  title: string;
+  remind_at: Date;
 }

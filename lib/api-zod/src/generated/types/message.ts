@@ -5,10 +5,12 @@
  * Hamad AI assistant API
  * OpenAPI spec version: 0.2.0
  */
-import type { ChatResponseMode } from './chatResponseMode';
+import type { MessageRole } from './messageRole';
 
-export interface ChatResponse {
-  reply: string;
-  mode: ChatResponseMode;
+export interface Message {
+  id: number;
   conversation_id: number;
+  role: MessageRole;
+  content: string;
+  created_at: Date;
 }

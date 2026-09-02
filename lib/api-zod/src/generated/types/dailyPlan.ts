@@ -5,7 +5,10 @@
  * Hamad AI assistant API
  * OpenAPI spec version: 0.2.0
  */
+import type { Task } from './task';
 
-export interface HealthStatus {
-  status: string;
+export interface DailyPlan {
+  date: Date;
+  tasks: Task[];
+  plan: string;
 }

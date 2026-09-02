@@ -1,0 +1,2 @@
+- [Assistant persistence boundary](assistant-persistence.md) — current durable data is project-level until explicit user accounts are introduced.
+- [Toolchain compatibility](toolchain-compatibility.md) — Drizzle identity IDs and OpenAPI integer schemas have current-version generation constraints.

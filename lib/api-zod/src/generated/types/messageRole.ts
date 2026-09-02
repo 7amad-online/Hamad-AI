@@ -6,9 +6,10 @@
  * OpenAPI spec version: 0.2.0
  */
 
-export type ChatResponseMode = typeof ChatResponseMode[keyof typeof ChatResponseMode];
+export type MessageRole = typeof MessageRole[keyof typeof MessageRole];
 
 
-export const ChatResponseMode = {
-  gemini: 'gemini',
+export const MessageRole = {
+  user: 'user',
+  assistant: 'assistant',
 } as const;

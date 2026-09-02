@@ -6,9 +6,10 @@
  * OpenAPI spec version: 0.2.0
  */
 
-export type ChatResponseMode = typeof ChatResponseMode[keyof typeof ChatResponseMode];
+export type SettingsLanguage = typeof SettingsLanguage[keyof typeof SettingsLanguage];
 
 
-export const ChatResponseMode = {
-  gemini: 'gemini',
+export const SettingsLanguage = {
+  en: 'en',
+  ar: 'ar',
 } as const;
